@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "@components/Button.svelte";
   import ImageUploader from "@components/ImageUploader.svelte";
+  import Modal from "@components/Modal.svelte";
   import createFaviconBundle from "@lib/createFaviconBundle";
 
   let file: { name: string; fileContent: string } | null = null;
@@ -16,7 +17,7 @@
       canvas.height = image.height;
       canvas.width = image.width;
       if (image.height !== image.width) {
-        console.log("Picture is not Symmetrical");
+        show = true;
       }
       ctx.drawImage(image, 0, 0, image.width, image.height);
       const zip = await createFaviconBundle(canvas);
@@ -27,6 +28,8 @@
       el.remove();
     };
   };
+
+  let show = false;
 </script>
 
 <section>
@@ -40,6 +43,11 @@
     </div>
   </div>
 </section>
+
+<Modal bind:show>
+  <span class="modal-msg">Your Picture is Not Symmetrical</span>
+  <span class="modal-msg">It May be cropped in conversion</span>
+</Modal>
 
 <svelte:head>
   <title>Favicon Generator - Web Dev Tools</title>
@@ -58,5 +66,13 @@
   .control {
     width: min(350px, 90vw);
     margin: 1.5rem auto;
+  }
+  .modal-msg {
+    color: var(--primary-color);
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.4rem;
   }
 </style>

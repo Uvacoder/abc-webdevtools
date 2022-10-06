@@ -113,7 +113,7 @@
       font-size: 1.25rem;
     }
     .upload-area {
-      min-height: min(300px, 30vh);
+      min-height: min(300px, 70vh);
       border-radius: 0.5rem;
       border: 2px dashed var(--primary-color-shade);
       margin: 0.75rem 0;

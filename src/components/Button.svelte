@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  export let href = "#";
+  export let href: string | null = null;
   export let as: "a" | "button" = "button";
   const eventDispatcher = createEventDispatcher();
 </script>
