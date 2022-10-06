@@ -25,7 +25,7 @@
     fileReader.onload = (e) => {
       const fileContent = e.target?.result as string;
       imgSrc = fileContent;
-      eventDispatcher("imageUpload", {
+      eventDispatcher("upload", {
         name: file.name,
         size: file.size,
         type: file.type,
@@ -83,10 +83,17 @@
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M125 58.3333L100 33.3333M100 33.3333L75 58.3333M100 33.3333V133.333M56.25 83.3333H50C36.1929 83.3333 25 94.5262 25 108.333V126.667C25 140.668 25 147.669 27.7248 153.016C30.1217 157.721 33.9462 161.545 38.6502 163.942C43.998 166.667 50.9987 166.667 65 166.667H135C149.001 166.667 156.002 166.667 161.35 163.942C166.054 161.545 169.878 157.721 172.275 153.016C175 147.669 175 140.668 175 126.667V108.333C175 94.5262 163.807 83.3333 150 83.3333H143.75"
+          d="M56.25 83.3333C36.1929 83.3333 25 94.5262 25 108.333V126.667C25 140.668 25 147.669 27.7248 153.016C30.1217 157.721 33.9462 161.545 38.6502 163.942C43.998 166.667 50.9987 166.667 65 166.667H135C149.001 166.667 156.002 166.667 161.35 163.942C166.054 161.545 169.878 157.721 172.275 153.016C175 147.669 175 140.668 175 126.667V108.333C175 94.5262 163.807 83.3333 150 83.3333H143.75"
           stroke-width="10"
           stroke-linecap="round"
           stroke-linejoin="round"
+        />
+        <path
+          d="M125 58.3333L100 33.3333L75 58.3333M100 33.3333V133.333"
+          stroke-width="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          id="arrow"
         />
       </svg>
     </div>
@@ -122,15 +129,19 @@
       justify-content: center;
       flex-direction: column;
       box-shadow: hsla(0, 0%, 0%, 0.24) 0px 3px 8px;
-      transition: all 300ms cubic-bezier(0.49, -0.05, 0.43, 1.1);
       padding: 1rem;
+
+      .logo svg path#arrow {
+        transition: all 300ms cubic-bezier(0.49, -0.05, 0.43, 1.1);
+        transform: translateY(0);
+      }
 
       &:hover,
       &.dragging {
         background: var(--gray-1);
         cursor: pointer;
-        .logo svg {
-          transform: translateY(-20px);
+        .logo svg path#arrow {
+          transform: translateY(-30px);
         }
       }
       &.error {

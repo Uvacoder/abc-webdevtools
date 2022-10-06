@@ -1,59 +1,65 @@
 <script lang="ts">
   import Button from "@components/Button.svelte";
   import ImageUploader from "@components/ImageUploader.svelte";
-  import Modal from "@components/Modal.svelte";
   import SeoTags from "@components/SeoTags.svelte";
   import createFaviconBundle from "@lib/createFaviconBundle";
+  import fileSaver from "@lib/fileSaver";
 
-  let file: { name: string; fileContent: string } | null = null;
+  type File = { name: string; fileContent: string } | null;
 
-  const createFavicon = () => {
+  let uploadedFile: File = null;
+  let errorMessage = "";
+  let image: HTMLImageElement;
+
+  const handleFileUpload = (file: File) => {
     if (!file) return;
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Failed to get Canvas Context");
-    const image = new Image();
+    uploadedFile = file;
+    image = new Image();
     image.src = file.fileContent;
-    image.onload = async () => {
-      canvas.height = image.height;
-      canvas.width = image.width;
-      if (image.height !== image.width) {
-        show = true;
-      }
-      ctx.drawImage(image, 0, 0, image.width, image.height);
-      const zip = await createFaviconBundle(canvas);
-      const el = document.createElement("a");
-      el.href = `data:text/binary;base64,${zip}`;
-      el.download = `${file?.name}.zip`;
-      el.click();
-      el.remove();
-    };
+    image.addEventListener(
+      "load",
+      () => {
+        if (image.height < 512 || image.width < 512) {
+          errorMessage = "The Recommended Size of Image is at least 512x512px";
+        } else if (image.height !== image.width) {
+          errorMessage = "The Image is Not Symmetrical [It May be stretched/squeezed]";
+        } else {
+          errorMessage = "";
+        }
+      },
+      { once: true },
+    );
   };
 
-  let show = false;
+  const createFavicon = async () => {
+    const canvas = document.createElement("canvas");
+    canvas.height = image.height;
+    canvas.width = image.width;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Failed to get Canvas Context");
+    ctx.drawImage(image, 0, 0, image.width, image.height);
+    const zip = await createFaviconBundle(canvas);
+    fileSaver(`data:text/binary;base64,${zip}`, `${uploadedFile?.name || "favicon"}.zip`);
+  };
 </script>
 
 <section>
   <h1>Favicon Generator</h1>
   <div class="container">
-    <ImageUploader on:imageUpload={(e) => (file = e.detail)} />
+    <ImageUploader on:upload={(e) => handleFileUpload(e.detail)} />
+    <span class="error-msg">{errorMessage}</span>
     <div class="control">
-      {#if !!file}
-        <Button on:click={createFavicon}>Generate Favicon Bundle</Button>
+      {#if !!uploadedFile}
+        <Button on:click={() => createFavicon()}>Generate Favicon Bundle</Button>
       {/if}
     </div>
   </div>
 </section>
 
-<Modal bind:show>
-  <span class="modal-msg">Your Picture is Not Symmetrical</span>
-  <span class="modal-msg">It May be cropped in conversion</span>
-</Modal>
-
 <svelte:head>
   <SeoTags
     title="Favicon Generator - Web Dev Tools"
-    description="Generate a Set Of Favicon from any image"
+    description="Generate a Bundle Of Favicon from any image"
     url="https://web-dev-tools.vercel.app/favicon"
   />
 </svelte:head>
@@ -72,12 +78,11 @@
     width: min(350px, 90vw);
     margin: 1.5rem auto;
   }
-  .modal-msg {
-    color: var(--primary-color);
-    text-align: center;
+  .error-msg {
     display: block;
-    margin: 0 auto;
     text-align: center;
-    font-size: 1.4rem;
+    margin: 0 auto;
+    color: var(--error-color);
+    font-weight: 600;
   }
 </style>

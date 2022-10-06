@@ -1,5 +1,47 @@
 import JSZip from "jszip";
 
+const iconListFile =
+  "// You May add this array to your manifest.json icon field\n" +
+  JSON.stringify(
+    JSON.parse(
+      `[{"src":"/img/android-icon-36x36.png","sizes":"36x36","type":"image/png","density":"0.75"},{"src":"/img/android-icon-48x48.png","sizes":"48x48","type":"image/png","density":"1.0"},{"src":"/img/android-icon-72x72.png","sizes":"72x72","type":"image/png","density":"1.5"},{"src":"/img/android-icon-96x96.png","sizes":"96x96","type":"image/png","density":"2.0"},{"src":"/img/android-icon-144x144.png","sizes":"144x144","type":"image/png","density":"3.0"},{"src":"/img/android-icon-192x192.png","sizes":"192x192","type":"image/png","density":"4.0"},{"src":"/img/android-chrome-192x192.png","sizes":"192x192","purpose":"maskable"},{"src":"/img/android-chrome-512x512.png","sizes":"512x512","purpose":"maskable"}]`,
+    ),
+    null,
+    2,
+  );
+
+const browserConfigFile = `<?xml version="1.0" encoding="utf-8"?>\n  <browserconfig>\n    <msapplication>\n      <tile>\n        <square70x70logo src="/img/ms-icon-70x70.png"/>\n        <square150x150logo src="/img/ms-icon-150x150.png"/>\n        <square310x310logo src="/img/ms-icon-310x310.png"/>\n        <TileColor>#ffffff</TileColor>\n      </tile>\n    </msapplication>\n  </browserconfig>`;
+
+const iconSizes: [number, string][] = [
+  [36, "android-icon-36x36.png"],
+  [48, "android-icon-48x48.png"],
+  [72, "android-icon-72x72.png"],
+  [96, "android-icon-96x96.png"],
+  [144, "android-icon-144x144.png"],
+  [192, "android-icon-192x192.png"],
+  [192, "android-chrome-192x192.png"],
+  [512, "android-chrome-512x512.png"],
+  [16, "favicon-16x16.png"],
+  [32, "favicon-32x32.png"],
+  [96, "favicon-96x96.png"],
+  [57, "apple-icon-57x57.png"],
+  [60, "apple-icon-60x60.png"],
+  [72, "apple-icon-72x72.png"],
+  [76, "apple-icon-76x76.png"],
+  [114, "apple-icon-114x114.png"],
+  [120, "apple-icon-120x120.png"],
+  [144, "apple-icon-144x144.png"],
+  [152, "apple-icon-152x152.png"],
+  [180, "apple-icon-180x180.png"],
+  [180, "apple-touch-icon.png"],
+  [192, "apple-icon.png"],
+  [192, "apple-icon-precomposed.png"],
+  [70, "ms-icon-70x70.png"],
+  [144, "ms-icon-144x144.png"],
+  [150, "ms-icon-150x150.png"],
+  [310, "ms-icon-310x310.png"],
+];
+
 // Heavily Inspired and Copied from https://github.com/johnsorrentino/favicon.js
 
 const resizeCanvas = (canvas: HTMLCanvasElement, height: number, width: number) => {
@@ -21,6 +63,7 @@ const resizeCanvas = (canvas: HTMLCanvasElement, height: number, width: number) 
   while (newCanvas.width / 2 >= width) {
     newCanvas = resize(newCanvas, newCanvas.width / 2, newCanvas.height / 2);
   }
+
   if (newCanvas.width > width) {
     newCanvas = resize(newCanvas, width, height);
   }
@@ -167,57 +210,23 @@ const createIcoImage = (canvas: HTMLCanvasElement, sizes: number[]) => {
   return window.btoa(binary);
 };
 
-const createPngImage = (canvas: HTMLCanvasElement, size: number) => {
-  return resizeCanvas(canvas, size, size).toDataURL();
-};
-
 const createFaviconBundle = async (canvas: HTMLCanvasElement) => {
   const zip = new JSZip();
+  zip.file("icon-list.jsonc", iconListFile);
+  zip.file("browserconfig.xml", browserConfigFile);
+
   const imgFolder = zip.folder("img");
-  if (!imgFolder) throw new Error("Failed to Create a Folder");
+  if (!imgFolder) throw new Error("Failed to Create a Folder in zip");
 
-  const icoImageDataURL = createIcoImage(canvas, [16, 32, 48]);
-  imgFolder.file("favicon.ico", icoImageDataURL, { base64: true });
+  const icoImage = createIcoImage(canvas, [16, 32, 48, 96, 128]);
+  imgFolder.file("favicon.ico", icoImage, { base64: true });
 
-  const addIconToZip = (size: number, fileName: string) => {
-    const file = createPngImage(canvas, size);
+  iconSizes.forEach(([size, fileName]) => {
+    const file = resizeCanvas(canvas, size, size).toDataURL();
     imgFolder.file(fileName, file.substring(file.indexOf("base64,") + 7), { base64: true });
-  };
+  });
 
-  const iconSizes: [number, string][] = [
-    [36, "android-icon-36x36.png"],
-    [48, "android-icon-48x48.png"],
-    [72, "android-icon-72x72.png"],
-    [96, "android-icon-96x96.png"],
-    [144, "android-icon-144x144.png"],
-    [192, "android-icon-192x192.png"],
-    [192, "android-chrome-192x192.png"],
-    [512, "android-chrome-512x512.png"],
-    [16, "favicon-16x16.png"],
-    [32, "favicon-32x32.png"],
-    [96, "favicon-96x96.png"],
-    [57, "apple-icon-57x57.png"],
-    [60, "apple-icon-60x60.png"],
-    [72, "apple-icon-72x72.png"],
-    [76, "apple-icon-76x76.png"],
-    [114, "apple-icon-114x114.png"],
-    [120, "apple-icon-120x120.png"],
-    [144, "apple-icon-144x144.png"],
-    [152, "apple-icon-152x152.png"],
-    [180, "apple-icon-180x180.png"],
-    [180, "apple-touch-icon.png"],
-    [192, "apple-icon.png"],
-    [192, "apple-icon-precomposed.png"],
-    [70, "ms-icon-70x70.png"],
-    [144, "ms-icon-144x144.png"],
-    [150, "ms-icon-150x150.png"],
-    [310, "ms-icon-310x310.png"],
-  ];
-
-  iconSizes.forEach(([size, fileName]) => addIconToZip(size, fileName));
-
-  const fileData = await zip.generateAsync({ type: "base64" });
-  return fileData;
+  return await zip.generateAsync({ type: "base64" });
 };
 
 export default createFaviconBundle;
