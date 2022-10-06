@@ -3,7 +3,7 @@
   "name": "Web Dev Tools",
   "short_name": "Web Dev Tools",
   "description": "A Set of Tools for Developers",
-  "background_color": "#ffb300",
+  "background_color": "#323232",
   "theme_color": "#ffb300",
   "dir": "auto",
   "id": "web-dev-tools",

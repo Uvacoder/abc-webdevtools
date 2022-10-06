@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "@components/Button.svelte";
+  import SeoTags from "@components/SeoTags.svelte";
   import OfflineImage from "./offline.svg";
 </script>
 
@@ -14,7 +15,11 @@
 </section>
 
 <svelte:head>
-  <title>You Are Offline</title>
+  <SeoTags
+    title="You are Offline - Web Dev Tools"
+    description="A Set Of Tools For Web Developers"
+    url="https://web-dev-tools.vercel.app/"
+  />
 </svelte:head>
 
 <style lang="scss">

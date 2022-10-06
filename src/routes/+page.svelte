@@ -1,3 +1,7 @@
+<script lang="ts">
+  import SeoTags from "@components/SeoTags.svelte";
+</script>
+
 <section>
   <h1>Web Dev Tools</h1>
   <hr />
@@ -10,7 +14,11 @@
 </section>
 
 <svelte:head>
-  <title>Web Dev Tools</title>
+  <SeoTags
+    title="Web Dev Tools"
+    description="A Set Of Tools For Web Developers"
+    url="https://web-dev-tools.vercel.app/"
+  />
 </svelte:head>
 
 <style lang="scss">

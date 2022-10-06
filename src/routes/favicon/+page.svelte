@@ -2,6 +2,7 @@
   import Button from "@components/Button.svelte";
   import ImageUploader from "@components/ImageUploader.svelte";
   import Modal from "@components/Modal.svelte";
+  import SeoTags from "@components/SeoTags.svelte";
   import createFaviconBundle from "@lib/createFaviconBundle";
 
   let file: { name: string; fileContent: string } | null = null;
@@ -50,7 +51,11 @@
 </Modal>
 
 <svelte:head>
-  <title>Favicon Generator - Web Dev Tools</title>
+  <SeoTags
+    title="Favicon Generator - Web Dev Tools"
+    description="Generate a Set Of Favicon from any image"
+    url="https://web-dev-tools.vercel.app/favicon"
+  />
 </svelte:head>
 
 <style lang="scss">

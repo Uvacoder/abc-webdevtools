@@ -1,3 +1,16 @@
+<script lang="ts">
+  export let title: string;
+  export let ogTitle = title;
+  export let description: string;
+  export let ogDescription = description;
+  export let robots = "follow, index";
+  export let url: string;
+  export let imageUrl: string = "/banner.png";
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 <link rel="apple-touch-icon" sizes="57x57" href="/img/apple-icon-57x57.png" />
 <link rel="apple-touch-icon" sizes="60x60" href="/img/apple-icon-60x60.png" />
 <link rel="apple-touch-icon" sizes="72x72" href="/img/apple-icon-72x72.png" />
@@ -18,3 +31,12 @@
 <meta name="msapplication-TileColor" content="##ffb300" />
 <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png" />
 <meta name="theme-color" content="#ffb300" />
+<title>{title}</title>
+<meta name="robots" content={robots} />
+<meta name="description" content={description} />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:site_name" content="Web Dev Tools" />
+<meta property="og:url" content={url} />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:image" content={imageUrl} />
