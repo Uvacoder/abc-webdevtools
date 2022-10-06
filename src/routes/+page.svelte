@@ -9,6 +9,10 @@
   <a href="https://github.com/YetAnotherDeveloperYT/Web-Dev-Tools">Contribute on github</a>
 </section>
 
+<svelte:head>
+  <title>Web Dev Tools</title>
+</svelte:head>
+
 <style lang="scss">
   section {
     width: min(440px, 90vw);

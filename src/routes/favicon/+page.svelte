@@ -41,6 +41,10 @@
   </div>
 </section>
 
+<svelte:head>
+  <title>Favicon Generator - Web Dev Tools</title>
+</svelte:head>
+
 <style lang="scss">
   h1 {
     text-align: center;
