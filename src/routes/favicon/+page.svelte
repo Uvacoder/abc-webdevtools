@@ -46,6 +46,9 @@
 </svelte:head>
 
 <style lang="scss">
+  section {
+    padding: 1rem 0;
+  }
   h1 {
     text-align: center;
     font-size: 2rem;

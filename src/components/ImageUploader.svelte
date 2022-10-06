@@ -71,7 +71,9 @@
       hidden
       bind:this={fileInput}
     />
-    <img class="preview" alt="Uploaded" src={imgSrc} hidden={!imgSrc} />
+    <div class="preview-box">
+      <img class="preview" alt="Uploaded" src={imgSrc} hidden={!imgSrc} />
+    </div>
     <div class="logo" hidden={!!imgSrc}>
       <svg
         width="200"
@@ -134,8 +136,12 @@
       &.error {
         border: 2px dashed var(--error-color-shade);
       }
+      .preview-box {
+        max-width: 90%;
+        pointer-events: none;
+      }
       .preview {
-        width: inherit;
+        width: 100%;
         pointer-events: none;
       }
       .logo {
