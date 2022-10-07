@@ -5,7 +5,7 @@
   export let ogDescription = description;
   export let robots = "follow, index";
   export let url: string;
-  export let imageUrl: string = "/banner.png";
+  export let imageUrl = "/banner.png";
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />

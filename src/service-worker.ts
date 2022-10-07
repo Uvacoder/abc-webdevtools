@@ -1,24 +1,19 @@
-//@ts-check
 /// <reference lib="WebWorker" />
+export declare const self: ServiceWorkerGlobalScope;
 
-/** @type {ServiceWorkerGlobalScope}*/
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const worker = self;
+const cacheName = "cache-v0.0.2";
 
-const cacheName = "cache-v0.0.1";
-
-worker.addEventListener("install", () => {
-  worker.skipWaiting();
+self.addEventListener("install", () => {
+  self.skipWaiting();
 });
 
-worker.addEventListener("activate", async () => {
+self.addEventListener("activate", async () => {
   const cache = await caches.open(cacheName);
   cache.addAll(["/", "/offline"]);
-  worker.clients.claim();
+  self.clients.claim();
 });
 
-worker.addEventListener("fetch", async (ev) => {
+self.addEventListener("fetch", async (ev) => {
   const responder = async () => {
     if (ev.request.method !== "GET") {
       return await fetch(ev.request);

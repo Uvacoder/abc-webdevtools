@@ -44,7 +44,7 @@
     class="upload-area"
     class:dragging
     class:error
-    on:dragover|preventDefault={() => {}}
+    on:dragover|preventDefault={() => null}
     on:dragenter|preventDefault={() => {
       dragging = true;
     }}
